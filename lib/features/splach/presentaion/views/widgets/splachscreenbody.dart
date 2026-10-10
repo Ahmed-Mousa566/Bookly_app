@@ -1,3 +1,4 @@
+import 'package:bookly_app/core/utils/assets.dart';
 import 'package:bookly_app/features/Home/presentaion/views/home_view.dart';
 import 'package:bookly_app/features/splach/presentaion/views/widgets/sliding_text.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,7 @@ class _SplachScreenBodyState extends State<SplachScreenBody>
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Image.asset('assets/images/Logo.png'),
+          Image.asset(AssetsData.logo, height: 18),
           slidingText(slidingAnimation: slidingAnimation),
         ],
       ),

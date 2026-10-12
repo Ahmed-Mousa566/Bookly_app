@@ -19,6 +19,7 @@ class HomeBody extends StatelessWidget {
         children: const [
           Padding(
             padding: EdgeInsets.only(
+              left: 24.0,
               right: 24.0,
               top: 40.0,
               bottom: 20.0,
@@ -36,13 +37,16 @@ class HomeBody extends StatelessWidget {
          
         ],
       ),
-    ),
+         ),
         ),
         SliverFillRemaining(
-          child: BestSellerListView(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            child: BestSellerListView(),
+          ),
         )
       ],
-
+     
      );
 
 

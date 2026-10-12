@@ -40,7 +40,7 @@ class BestSellerItem extends StatelessWidget {
                 ),
               ),
       
-              const SizedBox(width: 3),
+              const SizedBox(height: 3),
       
               CustomText(
                 text: 'J.K. Rowling',
@@ -69,13 +69,13 @@ class BestSellerItem extends StatelessWidget {
                       size: 20.0,
                     ),
 
-                 SizedBox(width: 3),
+                 SizedBox(width: 6.3),
                 CustomText(
                 text: '4.8',
                 size: 18.0,
                 fontWeight: FontWeight.w600,),
 
-                 SizedBox(width: 3),
+                 SizedBox(width: 5),
 
                CustomText(
                 text: '(2390)',

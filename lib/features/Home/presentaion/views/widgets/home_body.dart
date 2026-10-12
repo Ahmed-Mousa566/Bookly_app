@@ -29,9 +29,29 @@ class HomeBody extends StatelessWidget {
             size: 24.0,
             fontWeight: FontWeight.w600,
           ),
-          SizedBox(height: 20.0),
-          BestSellerItem(),
+          SizedBox(height: 12.0),
+          BestSellerListView(),
         ],
+      ),
+    );
+  }
+}
+
+class BestSellerListView extends StatelessWidget {
+  const BestSellerListView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  Expanded(
+      child: ListView.builder(
+        padding: EdgeInsets.zero,
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return const Padding(
+            padding: EdgeInsets.only(bottom: 20.0),
+            child: BestSellerItem(),
+          );
+        },
       ),
     );
   }

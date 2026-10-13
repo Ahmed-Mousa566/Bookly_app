@@ -2,6 +2,7 @@ import 'package:bookly_app/core/utils/custom_text.dart';
 import 'package:bookly_app/features/Home/presentaion/views/widgets/books_action.dart';
 import 'package:bookly_app/features/Home/presentaion/views/widgets/custom_book_image.dart';
 import 'package:bookly_app/features/Home/presentaion/views/widgets/custom_bookdetails_appbar.dart';
+import 'package:bookly_app/features/Home/presentaion/views/widgets/similar_book_listview.dart';
 import 'package:flutter/material.dart';
 
 class BookDetailsViewBody extends StatelessWidget {
@@ -59,6 +60,21 @@ class BookDetailsViewBody extends StatelessWidget {
           SizedBox(height: 37),
 
           const BookAction(),
+
+          const SizedBox(height: 50),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: const CustomText(
+              text: 'You can also like',
+              size: 18.0,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          SimilarBooksListview(),
         ],
       ),
     );

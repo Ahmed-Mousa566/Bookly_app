@@ -3,6 +3,7 @@ import 'package:bookly_app/core/utils/errors/failure.dart';
 import 'package:bookly_app/features/Home/data/model/book_model.dart';
 import 'package:bookly_app/features/Home/data/repos/home_repo.dart';
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 
 class HomeRepoImplement implements HomeRepo {
   final ApiService apiService;
@@ -10,14 +11,22 @@ class HomeRepoImplement implements HomeRepo {
   HomeRepoImplement({required this.apiService});
   @override
   Future<Either<Failure, List<BookModel>>> fetchNewestBooks() async {
-    var data = await apiService.get(
-      endPoint: 'volumes?filter=free-ebooks&q=flutter&orderBy=newest&',
-    );
-    List<BookModel> books = [];
-    for (var item in data['item']) {
-      books.add(BookModel.fromJson(item));
+    try {
+      var data = await apiService.get(
+        endPoint:
+            'volumes?q=subject:Programming&filter=free-ebooks&orderBy=newest',
+      );
+      List<BookModel> books = [];
+      for (var item in data['item']) {
+        books.add(BookModel.fromJson(item));
+      }
+      return right(books);
+    } catch (e) {
+      if (e is DioException) {
+        return left(ServerFailure.fromDioException(e));
+      }
+      return left(ServerFailure('Unexpected Error, Please try again!'));
     }
-    return right(books);
   }
 
   @override

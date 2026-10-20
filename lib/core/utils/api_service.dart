@@ -5,7 +5,7 @@ class ApiService {
 
   final Dio dio = Dio(
     BaseOptions(
-      baseUrl: 'https://www.googleapis.com/books/v1/',
+      baseUrl: 'https://openlibrary.org/',
       connectTimeout: const Duration(seconds: 15),
       receiveTimeout: const Duration(seconds: 15),
     ),
@@ -30,12 +30,14 @@ class ApiService {
 
       print('REQUEST URL: ${response.requestOptions.uri}');
       print('STATUS CODE: ${response.statusCode}');
+      print('PARAMETERS: $queryParameters');
 
       return response.data;
     } on DioException catch (e) {
       print('DIO ERROR TYPE: ${e.type}');
       print('DIO ERROR MESSAGE: ${e.message}');
       print('REQUEST URL: ${e.requestOptions.uri}');
+      print('PARAMETERS: $queryParameters');
       print('STATUS CODE: ${e.response?.statusCode}');
       print('RESPONSE BODY: ${e.response?.data}');
 

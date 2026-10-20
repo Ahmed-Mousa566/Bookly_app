@@ -20,22 +20,24 @@ class BookliApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-       BlocProvider(
-        create: (context) => FeaturedBooksCubit(getIt.get<HomeRepoImplement>()), 
-       ),
+        BlocProvider(
+          create: (context) =>
+              FeaturedBooksCubit(getIt.get<HomeRepoImplement>())
+                ..fetchFeaturedBook(),
+        ),
 
         BlocProvider(
-        create: (context) => NewestBookCubit(getIt.get<HomeRepoImplement>()), 
-       ),
-
-
+          create: (context) => NewestBookCubit(getIt.get<HomeRepoImplement>(),)..fetchNewestBooks(),
+        ),
       ],
       child: MaterialApp.router(
         routerConfig: AppRouter.router,
         debugShowCheckedModeBanner: false,
         theme: ThemeData.dark().copyWith(
           scaffoldBackgroundColor: kPrimaryColor,
-          textTheme: GoogleFonts.montserratTextTheme(ThemeData.dark().textTheme),
+          textTheme: GoogleFonts.montserratTextTheme(
+            ThemeData.dark().textTheme,
+          ),
         ),
       ),
     );

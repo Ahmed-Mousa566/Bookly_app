@@ -9,45 +9,70 @@ class HomeRepoImplement implements HomeRepo {
   final ApiService apiService;
 
   HomeRepoImplement({required this.apiService});
-  @override
-  Future<Either<Failure, List<BookModel>>> fetchNewestBooks() async {
+
+    @override
+  Future<Either<Failure, List<BookModel>>> fetchFeaturedBooks() async {
     try {
-      var data = await apiService.get(
-        endPoint:
-            'volumes?q=subject:Programming&filter=free-ebooks&orderBy=newest',
+      final data = await apiService.get(
+        endPoint: 'volumes',
+        queryParameters: {
+          'q': 'Programming',
+        //  'filter': 'free-ebooks',
+
+        },
       );
-      List<BookModel> books = [];
-      for (var item in data['item']) {
+
+      final List<BookModel> books = [];
+
+      for (var item in data['items'] ?? []) {
         books.add(BookModel.fromJson(item));
       }
+
       return right(books);
+    } on DioException catch (e) {
+      print('FEATURED BOOKS ERROR: ${e.response?.data ?? e.message}');
+
+      return left(ServerFailure.fromDioException(e));
     } catch (e) {
-      if (e is DioException) {
-        return left(ServerFailure.fromDioException(e));
-      }
-      return left(ServerFailure('Unexpected Error, Please try again!'));
+      print('FEATURED BOOKS ERROR: $e');
+
+      return left(
+        ServerFailure('Unexpected Error, Please try again!'),
+      );
     }
   }
 
   @override
-  Future<Either<Failure, List<BookModel>>> fetchFeaturedBooks() async {
-   try {
-      var data = await apiService.get(
-        endPoint:
-            'volumes?q=subject:Programming&filter=free-ebooks',
+  Future<Either<Failure, List<BookModel>>> fetchNewestBooks() async{
+      try {
+      final data = await apiService.get(
+        endPoint: 'volumes',
+        queryParameters: {
+          'q': 'Programming',
+          // 'filter': 'free-ebooks',
+          'orderBy':'newest'
+        },
       );
-      List<BookModel> books = [];
-      for (var item in data['item']) {
+
+      final List<BookModel> books = [];
+
+      for (var item in data['items'] ?? []) {
         books.add(BookModel.fromJson(item));
       }
-      return right(books);
-    } catch (e) {
-      if (e is DioException) {
-        return left(ServerFailure.fromDioException(e));
-      }
-      return left(ServerFailure('Unexpected Error, Please try again!'));
-    
-  }
 
+      return right(books);
+    } on DioException catch (e) {
+      print('FEATURED BOOKS ERROR: ${e.response?.data ?? e.message}');
+
+      return left(ServerFailure.fromDioException(e));
+    } catch (e) {
+      print('FEATURED BOOKS ERROR: $e');
+
+      return left(
+        ServerFailure('Unexpected Error, Please try again!'),
+      );
+    }
   }
 }
+
+

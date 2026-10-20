@@ -1,44 +1,52 @@
 import 'package:dio/dio.dart';
 
 class ApiService {
-  final Dio dio = Dio();
-  final _baseUrl = 'https://www.googleapis.com/books/v1/';
-  final _key = 'AIzaSyBrPZtTwW9CCNm6FmpMAfV58gCZqrBREG8';
-  Future<dynamic> get({required String endPoint, String? token}) async {
-    final options = Options(
-      headers: token != null ? {'Authorization': 'Bearer $token'} : null,
-    );
+  static const String key = 'AIzaSyCwjAji9KGNt9bVF1Ia2DNv3GjOGaOjTtU';
 
-    final response = await dio.get('$_baseUrl$endPoint$_key', options: options);
-
-    return response.data;
-  }
-
-  Future<dynamic> post({
-    required String url,
-    dynamic body,
+  final Dio dio = Dio(
+    BaseOptions(
+      baseUrl: 'https://www.googleapis.com/books/v1/',
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 15),
+    ),
+  );
+  Future<dynamic> get({
+    required String endPoint,
+    Map<String, dynamic>? queryParameters,
     String? token,
   }) async {
     final options = Options(
       headers: token != null ? {'Authorization': 'Bearer $token'} : null,
     );
 
-    final response = await dio.post(url, data: body, options: options);
+    try {
+      print('GET REQUEST STARTED');
 
-    return response.data;
-  }
+      final response = await dio.get(
+        endPoint,
+        queryParameters: {...?queryParameters, 'key': key},
+        options: options,
+      );
 
-  Future<dynamic> put({
-    required String url,
-    dynamic body,
-    String? token,
-  }) async {
-    final options = Options(
-      headers: token != null ? {'Authorization': 'Bearer $token'} : null,
-    );
+      print('REQUEST URL: ${response.requestOptions.uri}');
+      print('STATUS CODE: ${response.statusCode}');
 
-    final response = await dio.put(url, data: body, options: options);
+      return response.data;
+    } on DioException catch (e) {
+      print('DIO ERROR TYPE: ${e.type}');
+      print('DIO ERROR MESSAGE: ${e.message}');
+      print('REQUEST URL: ${e.requestOptions.uri}');
+      print('STATUS CODE: ${e.response?.statusCode}');
+      print('RESPONSE BODY: ${e.response?.data}');
 
-    return response.data;
+      rethrow;
+    } catch (e) {
+      print('API SERVICE ERROR: $e');
+      rethrow;
+    }
   }
 }
+
+
+
+

@@ -1,7 +1,7 @@
 part of 'newest_book_cubit.dart';
 
 @immutable
- sealed  class NewestBookState {}
+sealed class NewestBookState {}
 
 final class NewestBookInitial extends NewestBookState {}
 
@@ -14,8 +14,7 @@ final class NewestBookSuccess extends NewestBookState {
 }
 
 final class NewestBookFailur extends NewestBookState {
-  final String errorMessege;
+  final String errMessege;
 
-   NewestBookFailur({required this.errorMessege});
-
+  NewestBookFailur({required this.errMessege});
 }

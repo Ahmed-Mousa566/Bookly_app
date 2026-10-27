@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({super.key});
-
+ 
   @override
   Widget build(BuildContext context) {
     return Row(

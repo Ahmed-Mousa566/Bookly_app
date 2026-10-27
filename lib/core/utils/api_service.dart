@@ -1,13 +1,12 @@
 import 'package:dio/dio.dart';
 
 class ApiService {
-  static const String key = 'AIzaSyCwjAji9KGNt9bVF1Ia2DNv3GjOGaOjTtU';
-
   final Dio dio = Dio(
     BaseOptions(
-      baseUrl: 'https://openlibrary.org/',
-      connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 15),
+      baseUrl: 'https://gutendex.com/',
+      //    connectTimeout: const Duration(seconds: 30),
+      // receiveTimeout: const Duration(seconds: 30),
+      // sendTimeout: const Duration(seconds: 30),
     ),
   );
   Future<dynamic> get({
@@ -21,12 +20,16 @@ class ApiService {
 
     try {
       print('GET REQUEST STARTED');
-
+      print('⏳ BEFORE DIO GET');
       final response = await dio.get(
         endPoint,
-        queryParameters: {...?queryParameters, 'key': key},
+        queryParameters: {...?queryParameters},
         options: options,
       );
+
+      print('✅ AFTER DIO GET');
+      print('📡 STATUS: ${response.statusCode}');
+      print('📦 DATA: ${response.data}');
 
       print('REQUEST URL: ${response.requestOptions.uri}');
       print('STATUS CODE: ${response.statusCode}');
@@ -48,7 +51,3 @@ class ApiService {
     }
   }
 }
-
-
-
-

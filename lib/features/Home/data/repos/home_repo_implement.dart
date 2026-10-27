@@ -10,23 +10,17 @@ class HomeRepoImplement implements HomeRepo {
 
   HomeRepoImplement({required this.apiService});
 
-    @override
+  @override
   Future<Either<Failure, List<BookModel>>> fetchFeaturedBooks() async {
     try {
       final data = await apiService.get(
-        endPoint: 'search.json',
-        queryParameters: {
-         'q': 'subject:programming',
-    'sort': 'new',
-    'limit' : 20,
-    'fields': 'key,title,author_name,cover_i,first_publish_year',
-
-        },
+        endPoint: 'books/',
+        queryParameters: {'sort': 'popular', 'languages': 'en', 'page': 1},
       );
 
       final List<BookModel> books = [];
 
-      for (var item in data['docs'] ?? []) {
+      for (var item in data['results'] ?? []) {
         books.add(BookModel.fromJson(item));
       }
 
@@ -38,27 +32,21 @@ class HomeRepoImplement implements HomeRepo {
     } catch (e) {
       print('FEATURED BOOKS ERROR: $e');
 
-      return left(
-        ServerFailure('Unexpected Error, Please try again!'),
-      );
+      return left(ServerFailure('Unexpected Error, Please try again!'));
     }
   }
 
   @override
-  Future<Either<Failure, List<BookModel>>> fetchNewestBooks() async{
-      try {
+  Future<Either<Failure, List<BookModel>>> fetchNewestBooks() async {
+    try {
       final data = await apiService.get(
-        endPoint: 'search.json',
-        queryParameters: {
-                'q': 'subject:programming',
-    'sort': 'new',
-    'fields': 'key,title,author_name,cover_i,first_publish_year',
-        },
+        endPoint: 'books/',
+        queryParameters: {'sort': 'descending', 'languages': 'en', 'page': 1},
       );
 
       final List<BookModel> books = [];
 
-      for (var item in data['docs'] ?? []) {
+      for (var item in data['results'] ?? []) {
         books.add(BookModel.fromJson(item));
       }
 
@@ -70,11 +58,50 @@ class HomeRepoImplement implements HomeRepo {
     } catch (e) {
       print('FEATURED BOOKS ERROR: $e');
 
-      return left(
-        ServerFailure('Unexpected Error, Please try again!'),
+      return left(ServerFailure('Unexpected Error, Please try again!'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<BookModel>>> fetchSimillerBooks(
+    BookModel book,
+  ) async {
+    try {
+      String topic = 'adventure';
+
+      if (book.subjects.isNotEmpty) {
+        topic = book.subjects.first.split(RegExp(r'--|,|;')).first.trim();
+      }
+
+      final data = await apiService.get(
+        endPoint: 'books/',
+        queryParameters: {'topic': topic, 'languages': 'en', 'page': 1},
       );
+
+      final List<BookModel> books = [];
+
+       for (var item in data['results'] ?? []) {
+      final similarBook = BookModel.fromJson(
+        Map<String, dynamic>.from(item),
+      );
+
+      if (similarBook.id != book.id) {
+        books.add(similarBook);
+      }
+    }
+
+      return right(books);
+    } on DioException catch (e) {
+  print('STATUS CODE: ${e.response?.statusCode}');
+  print('REQUEST URL: ${e.requestOptions.uri}');
+  print('RESPONSE DATA: ${e.response?.data}');
+  print('ERROR MESSAGE: ${e.message}');
+
+      return left(ServerFailure.fromDioException(e));
+    } catch (e) {
+      print('FEATURED BOOKS ERROR: $e');
+
+      return left(ServerFailure(e.toString()));
     }
   }
 }
-
-

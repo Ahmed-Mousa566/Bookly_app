@@ -1,18 +1,21 @@
+import 'package:bookly_app/core/utils/app_router.dart';
+import 'package:bookly_app/features/Home/data/model/book_model.dart';
 import 'package:bookly_app/features/Home/presentaion/views/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class BookAction extends StatelessWidget {
-  const BookAction({super.key});
-
+  const BookAction({super.key, required this.bookModel});
+  final BookModel bookModel;
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: const [
+      children: [
         Expanded(
-          child: SizedBox(
+          child: const SizedBox(
             height: 47.0,
-            child: CustomButton(
-              text: '19.99 €',
+            child:  CustomButton(
+              text: 'Free - Book',
               size: 18.0,
               fontWeight: FontWeight.w900,
               backgroundColor: Colors.white,
@@ -25,10 +28,13 @@ class BookAction extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: SizedBox(
+          child:  SizedBox(
             height: 47.0,
             child: CustomButton(
-              text: 'Free Preview',
+              onPressed: () => GoRouter.of(
+                context,
+              ).push(AppRouter.kBookReaderView, extra: bookModel),
+              text: 'Read Now',
               size: 18.0,
               fontWeight: FontWeight.w800,
               backgroundColor: Color(0xffEF8262),
